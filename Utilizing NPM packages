@@ -1,0 +1,57 @@
+const _ = require('lodash');
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+const questions = [
+    {
+        question: "What is the capital of Italy?",
+        options: _.shuffle(["Brussels", "Rome", "Accra", "Abuja"]),
+        answer: 1,
+    },
+
+    {
+        question: "What is the capital of Ghana?",
+        options: _.shuffle(["Brussels", "Rome", "Accra", "Abuja"]),
+        answer: 2,
+    },
+
+    {
+        question: "What is the capital of Belgium?",
+        options: _.shuffle(["Brussels", "Rome", "Accra", "Abuja"]),
+        answer: 1,
+    },
+];
+
+let score = 0;
+let currentQuestionIndex = 0;
+
+function askQuestion() {
+    const question = questions[currentQuestionIndex];
+    console.log(question.question);
+    question.options.forEach((option, index) => {
+        console.log(`  ${index + 1}. ${option}`);
+    });
+
+    rl.question('What is your number? ', (number) => {
+        const userGuess = parseInt(number) - 1;
+        if (userGuess === question.answer) {
+            console.log("Correct!");
+            score++;
+        } else {
+            console.log("Incorrect. The answer is", question.options[question.answer]);
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            askQuestion();
+        } else {
+            console.log(`Your score is ${score}/${questions.length}`);
+            rl.close();
+        }
+    });
+}
+
+askQuestion();
